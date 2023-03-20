@@ -44,7 +44,7 @@
               <p>
                 <strong>Lorem ipsum</strong><br />
                 Lorem ipsum<br />
-                Transparency International Deutschland<br />
+                Transparency International Romania<br />
                 000000000<br />
                 <a href="mailto:lorem@ipsum.lorem">lorem@ipsum.lorem</a>
               </p>

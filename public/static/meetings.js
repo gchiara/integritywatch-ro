@@ -46756,7 +46756,7 @@ window.underscore = _underscore.default;
 window._ = _underscore.default;
 // Data object - is also used by Vue
 var vuedata = {
-  page: 'organizations',
+  page: 'meetings',
   loader: true,
   showInfo: true,
   showShare: true,
@@ -47407,7 +47407,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53625" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50327" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

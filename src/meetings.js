@@ -25,7 +25,7 @@ import ChartHeader from './components/ChartHeader.vue';
 // Data object - is also used by Vue
 
 var vuedata = {
-  page: 'organizations',
+  page: 'meetings',
   loader: true,
   showInfo: true,
   showShare: true,

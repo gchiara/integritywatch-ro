@@ -6,7 +6,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a href="./" class="nav-link" :class="{active: page == 'lobbyists'}">Lobbyists</a>
+        <a href="./" class="nav-link" :class="{active: page == 'meetings'}">Lobby meetings</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,14 +31,6 @@
       <li class="nav-item">
         <a href="./about" class="nav-link nav-link-about">About</a>
       </li>
-      <!--
-      <li class="nav-item">
-        <i class="material-icons nav-link icon-btn info-btn" @click="showInfo = !showInfo">info</i>
-      </li>
-      <li class="nav-item">
-        <i class="material-icons nav-link icon-btn share-btn" @click="showShare = !showShare">share</i>
-      </li>
-      -->
     </ul>
   </div>
 </nav>

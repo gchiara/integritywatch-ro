@@ -33,29 +33,33 @@ var vuedata = {
   selectedMandate: 'all',
   charts: {
     mandateSelector: {
-      title: 'Select legislature',
+      title: 'Selectați legislatura',
       info: 'Lorem ipsum'
     },
     institution: {
-      title: 'Institutions',
+      title: 'Top 20 instituții',
+      info: 'Lorem ipsum'
+    },
+    institutionCategory: {
+      title: 'Tipul instituției',
       info: 'Lorem ipsum'
     },
     topOfficials: {
-      title: 'Top 10 officials',
+      title: 'Top 10 demnitari',
       info: 'Lorem ipsum'
     },
     role: {
-      title: 'Public official roles',
+      title: 'Funcția demnitarilor',
       info: 'Lorem ipsum'
     },
     subjects: {
-      title: 'Subjects',
+      title: 'Subiecte abordate',
       info: 'Lorem ipsum'
     },
     table: {
       chart: null,
       type: 'table',
-      title: 'Meetings',
+      title: 'Întâlniri',
       info: 'Lorem ipsum'
     }
   },
@@ -117,6 +121,11 @@ var charts = {
     chart: dc.rowChart("#institution_chart"),
     type: 'row',
     divId: 'institution_chart'
+  },
+  institutionCategory: {
+    chart: dc.pieChart("#institutioncategory_chart"),
+    type: 'pie',
+    divId: 'institutioncategory_chart'
   },
   topOfficials: {
     chart: dc.rowChart("#topofficials_chart"),
@@ -289,7 +298,14 @@ for ( var i = 0; i < 5; i++ ) {
 json('./data/meetings.json?' + randomPar, (err, meetings) => {
   //Parse data
   _.each(meetings, function (d) {
-    
+    //Refine streamlining of institutions
+    d.decident_institution_streamlined_refined = d.decident_institution_streamlined;
+    if(d.decident_institution_streamlined.indexOf('Ministerul') > -1) {
+      d.decident_institution_streamlined_refined = 'Ministerul';
+    }
+    if(d.decident_institution_streamlined == '') {
+      d.decident_institution_streamlined_refined = 'N/A';
+    }
   });
 
   //Set dc main vars
@@ -306,7 +322,8 @@ json('./data/meetings.json?' + randomPar, (err, meetings) => {
   var createInstitutionChart = function() {
     var chart = charts.institution.chart;
     var dimension = ndx.dimension(function (d) {
-        return d.decident_institution_streamlined;
+        //return d.decident_institution_streamlined_refined;
+        return d.decident_institution;
     }, false);
     var group = dimension.group().reduceSum(function (d) {
         return 1;
@@ -314,7 +331,7 @@ json('./data/meetings.json?' + randomPar, (err, meetings) => {
     var filteredGroup = (function(source_group) {
       return {
         all: function() {
-          return source_group.top(100).filter(function(d) {
+          return source_group.top(20).filter(function(d) {
             return true;
           });
         }
@@ -342,6 +359,45 @@ json('./data/meetings.json?' + randomPar, (err, meetings) => {
       })
       .elasticX(true)
       .xAxis().ticks(4);
+    chart.render();
+  }
+
+  //CHART 2 - Institutions Categories
+  var createInstitutionCategoryChart = function() {
+    var chart = charts.institutionCategory.chart;
+    var dimension = ndx.dimension(function (d) {
+      return d.decident_institution_streamlined_refined;
+    });
+    var group = dimension.group().reduceSum(function (d) { return 1; });
+    var sizes = calcPieSize(charts.institutionCategory.divId);
+    chart
+      .width(sizes.width)
+      .height(sizes.height)
+      .cy(sizes.cy)
+      .cap(7)
+      .innerRadius(sizes.innerRadius)
+      .radius(sizes.radius)
+      .legend(dc.legend().x(0).y(sizes.legendY).gap(10).autoItemWidth(true).horizontal(true).legendWidth(sizes.width).legendText(function(d) { 
+        var thisKey = d.name;
+        if(thisKey.length > 40){
+          return thisKey.substring(0,40) + '...';
+        }
+        return thisKey;
+      }))
+      .title(function(d){
+        var thisKey = d.key;
+        return thisKey + ': ' + d.value;
+      })
+      .dimension(dimension)
+      //.ordinalColors(vuedata.colors.range)
+      .colorCalculator(function(d, i) {
+        if(d.key == "Others") {
+          return "#ddd";
+        }
+        return vuedata.colors.range[i];
+      })
+      .group(group);
+
     chart.render();
   }
 
@@ -448,7 +504,7 @@ json('./data/meetings.json?' + randomPar, (err, meetings) => {
     .ordinalColors(vuedata.colors.colorSchemeCloud)
     .size(recalcWidthWordcloud())
     .font("Impact")
-    .stopWords(/^(i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall|la|du|mr|commissioner|et|des|dg|commission|de|pour|en|les|le|meeting|eu|new|priorities|presentation|preparation|issues|meetings|representatives|work|implementation|general|future|challenge|challenge|skey|role|exchange|views|discuss|discussion|various director|talks|position|global|field|level|initiative|company|state|aspects|context|current|change|european|potential|including|dans|within|developments|play|present|single|policy)$/)
+    .stopWords(/^(și|pentru|în|din|de|al|a|l|la|le|li|cu|–|of|pe)$/)
     .onClick(function(d){setword(d.key);})
     .textAccessor(function(d) {return d.title;});
     chart.size(recalcWidthWordcloud());
@@ -529,7 +585,7 @@ json('./data/meetings.json?' + randomPar, (err, meetings) => {
       "bPaginate": true,
       "bLengthChange": true,
       "bFilter": false,
-      "order": [[ 2, "desc" ]],
+      "order": [[ 5, "desc" ]],
       "bSort": true,
       "bInfo": true,
       "bAutoWidth": false,
@@ -639,6 +695,7 @@ json('./data/meetings.json?' + randomPar, (err, meetings) => {
   
   //Render charts
   createInstitutionChart();
+  createInstitutionCategoryChart();
   createTopOfficialsChart();
   createRoleChart();
   createSubjectsChart();

@@ -6,11 +6,11 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a href="./" class="nav-link" :class="{active: page == 'meetings'}">Lobby meetings</a>
+        <a href="./" class="nav-link" :class="{active: page == 'meetings'}">Întâlniri cu caracter de lobby</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          National versions
+        Țări
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="https://www.integritywatch.eu/" target="_blank">EU</a>
@@ -29,7 +29,7 @@
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a href="./about" class="nav-link nav-link-about">About</a>
+        <a href="./about" class="nav-link nav-link-about">Despre</a>
       </li>
     </ul>
   </div>
